@@ -8,10 +8,10 @@ import Logo from "../../../public/logo.png";
 
 const Header = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Calculate scroll progress from 0 to 1 over first 100px of scroll
       const progress = Math.min(window.scrollY / 100, 1);
       setScrollProgress(progress);
     };
@@ -20,7 +20,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Interpolate opacity from 0.65 to 0 based on scroll progress
   const shadowOpacity = 0.65 * (1 - scrollProgress);
 
   return (
@@ -37,7 +36,7 @@ const Header = () => {
       }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link href="/" className="flex text-3xl font-bold bg-clip-text text-transparent ">
+        <Link href="/" className="flex text-3xl font-bold bg-clip-text text-transparent">
           <Image
             src={Logo}
             alt="Bot Interface"
@@ -49,23 +48,15 @@ const Header = () => {
           />
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link
-            href="/projects"
-            className="text-base text-gray-300 hover:text-white transition-colors"
-          >
+          <Link href="/projects" className="text-base text-gray-300 hover:text-white transition-colors">
             Projects
           </Link>
-          <Link
-            href="/about"
-            className="text-base text-gray-300 hover:text-white transition-colors"
-          >
+          <Link href="/about" className="text-base text-gray-300 hover:text-white transition-colors">
             About
           </Link>
-          <Link
-            href="/contacts"
-            className="text-base text-gray-300 hover:text-white transition-colors"
-          >
+          <Link href="/contacts" className="text-base text-gray-300 hover:text-white transition-colors">
             Contacts
           </Link>
           <Link
@@ -77,7 +68,8 @@ const Header = () => {
           </Link>
         </nav>
 
-        <button className="md:hidden text-white">
+        {/* Mobile Menu Button */}
+        <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -94,6 +86,29 @@ const Header = () => {
           </svg>
         </button>
       </div>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <nav className="md:hidden absolute top-full left-0 right-0 bg-black bg-opacity-90 backdrop-blur-lg p-6 flex flex-col items-center gap-4">
+          <Link href="/projects" className="text-white text-lg" onClick={() => setIsMenuOpen(false)}>
+            Projects
+          </Link>
+          <Link href="/about" className="text-white text-lg" onClick={() => setIsMenuOpen(false)}>
+            About
+          </Link>
+          <Link href="/contacts" className="text-white text-lg" onClick={() => setIsMenuOpen(false)}>
+            Contacts
+          </Link>
+          <Link
+            href="https://calendly.com/mainakchaudhuri671/tech-talk"
+            target="_blank"
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 text-white text-lg font-medium"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Get Started
+          </Link>
+        </nav>
+      )}
     </motion.header>
   );
 };
